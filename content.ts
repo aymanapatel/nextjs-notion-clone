@@ -29,7 +29,7 @@ export const home = {
 export const posts = {
   draft: [
     `---
-title: "We're hiring"
+title: "We're hiring (CMS Posts)"
 summary: 'Will come up with summary later'
 slug: 'we-are-hiring'
 publsihedOn: ''
@@ -38,7 +38,7 @@ publsihedOn: ''
 ## nice post, who dis
 `,
     `---
-title: Why you should write down everything
+title: Why you should write down everything(CMS Posts)
 summary: Will come up with summary later
 slug: why-you-should-write-down-everything
 publsihedOn: ''
@@ -47,7 +47,7 @@ publsihedOn: ''
   ],
   published: [
     `---
-title: "We're hiring"
+title: "We're hiring(CMS Posts)"
 summary: Come work at a really nice company.
 slug: we-are-hiring
 publsihedOn: '12-03-2020'
@@ -55,7 +55,7 @@ publsihedOn: '12-03-2020'
 ## Come with with us
 `,
     `---
-title: Why you should write down everything
+title: Why you should write down everything(CMS Posts)
 summary: If you write it down, you won't forget.
 slug: why-you-should-write-down-everything
 publsihedOn: '3-20-2020'

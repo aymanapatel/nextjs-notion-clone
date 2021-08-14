@@ -32,9 +32,38 @@ Blog.defaultProps = {
   posts: [],
 }
 
-export default Blog
-
 /**
  * Need to get the posts from the
  * fs and our CMS
  */
+export function getStaticProps() {
+
+  // From CMS
+  const cmsPosts = postsFromCMS.published.map((post) => {
+
+    const { data } = matter(post)
+    return data
+  })
+
+  const postPaths = path.join(process.cwd(), 'posts')
+  const fileNames = fs.readdirSync(postPaths) // Next.JS allows FS. Client side React does not support FS.
+
+  //  From File System
+  const filePosts = fileNames.map((name) => {
+    const fullPath = path.join(process.cwd(), 'posts', name)
+    const file = fs.readFileSync(fullPath, 'utf-8')
+    const { data } = matter(file)
+    return data
+  })
+
+
+  const posts = [...cmsPosts, ...filePosts]
+
+  return {
+    props: { posts }  // passed to `<Blog posts={posts[]}/>`
+
+  }
+}
+
+export default Blog
+
