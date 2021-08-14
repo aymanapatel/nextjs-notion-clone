@@ -56,7 +56,7 @@ BlogPost.defaultProps = {
 }
 
 /**
- * Need to get the paths here
+ * Need to get the pat hs here
  * then the the correct post for the matching path
  * Posts can come from the fs or our CMS
  */
@@ -75,12 +75,15 @@ export function getStaticPaths() {
 
   return {
     paths: slugs.map((s) => ({ params: { slug: s.slug } })),
-    fallback: false, // 404
-    // fallback: true, // Retry till the path gets hydrated. Shows spinner
+
+    // fallback: false, // 404
+    fallback: true, // Retry till the path gets hydrated. Shows spinner
   }
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params, preview }) {
+
+  console.log(`@Preview in slug ${preview}`)
 
   let post
 
@@ -91,7 +94,7 @@ export async function getStaticProps({ params }) {
 
   } catch {
 
-    const cmsPosts = posts.published.map((p) => {
+    const cmsPosts = (preview ? posts.draft : posts.published).map((p) => {
       return matter(p)
     })
 

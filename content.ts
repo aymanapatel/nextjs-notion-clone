@@ -1,7 +1,7 @@
 export const home = {
   draft: {
     hero: {
-      title: 'Hmm, need something clever here',
+      title: '(DRAFT) Hmm, need something clever here',
       body: 'blah blah blah, our product is the best!',
     },
     features: [
@@ -29,13 +29,13 @@ export const home = {
 export const posts = {
   draft: [
     `---
-title: "We're hiring (CMS Posts)"
+title: "(DRAFT/PREVIEW)We're hiring (CMS Posts)"
 summary: 'Will come up with summary later'
 slug: 'we-are-hiring'
 publsihedOn: ''
 ---
 
-## nice post, who dis
+## DRAFT CONTENT
 `,
     `---
 title: Why you should write down everything(CMS Posts)

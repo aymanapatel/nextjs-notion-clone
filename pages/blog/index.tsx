@@ -36,10 +36,13 @@ Blog.defaultProps = {
  * Need to get the posts from the
  * fs and our CMS
  */
-export function getStaticProps() {
+export function getStaticProps(ctx) {
+
+
+  console.log(`@@ CTX/Preview in Index.tsx ${ctx.preview}`)
 
   // From CMS
-  const cmsPosts = postsFromCMS.published.map((post) => {
+  const cmsPosts = (ctx.preview ? postsFromCMS.draft : postsFromCMS.published).map((post) => {
 
     const { data } = matter(post)
     return data
