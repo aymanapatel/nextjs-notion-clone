@@ -2,14 +2,15 @@
 // https://github.com/nextauthjs/next-auth/issues/833
 import 'reflect-metadata'
 import React from 'react'
-import '../styles/globals.css'
 import { Provider } from 'next-auth/client'
+import '../styles/globals.css'
 
-// getServerSideProps and getStaticProps
 function MyApp({ Component, pageProps }) {
-  return <Provider session={pageProps}>
-    <Component {...pageProps} />
-  </Provider>
+  return (
+    <Provider session={pageProps.session}>
+      <Component {...pageProps} />
+    </Provider>
+  )
 }
 
 export default MyApp

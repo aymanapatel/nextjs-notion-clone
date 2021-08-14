@@ -18,21 +18,21 @@ const HomeNav: FC<{ links?: { name: string; link: string }[] }> = ({ links }) =>
             <Pane display="flex" justifyContent="space-around" alignItems="center">
               {links && links.length > 0
                 ? links.map((link) => (
-                    <Pane paddingX={majorScale(3)} key={link.name}>
-                      <NextLink href="/blog">
-                        <a>
-                          <Text fontSize="16px">Blog</Text>
-                        </a>
-                      </NextLink>
-                    </Pane>
-                  ))
+                  <Pane paddingX={majorScale(3)} key={link.name}>
+                    <NextLink href="/blog">
+                      <a>
+                        <Text fontSize="16px">Blog</Text>
+                      </a>
+                    </NextLink>
+                  </Pane>
+                ))
                 : null}
 
               <Pane paddingX={majorScale(3)}>
                 <NextLink href={session ? '/app' : '/signin'}>
                   <a>
                     <Button appearance="primary" fontSize="16px">
-                      {session ? 'Dashboard' : 'Sign up'}
+                      {session ? 'Dashboard' : 'Sign in'}
                     </Button>
                   </a>
                 </NextLink>
