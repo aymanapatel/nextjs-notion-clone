@@ -16,15 +16,9 @@ const BlogPost: FC<Post> = ({ source, frontMatter }) => {
   const content = hydrate(source)
   const router = useRouter()
 
-
-  /**
-   * Fallback
-   * 1. true: Show spinner
-   * 2. false:   
-  */
   if (router.isFallback) {
     return (
-      <Pane width="100%" height="100%" >
+      <Pane width="100%" height="100%">
         <Spinner size={48} />
       </Pane>
     )
@@ -55,18 +49,10 @@ BlogPost.defaultProps = {
   frontMatter: { title: 'default title', summary: 'summary', publishedOn: '' },
 }
 
-/**
- * Need to get the pat hs here
- * then the the correct post for the matching path
- * Posts can come from the fs or our CMS
- */
 export function getStaticPaths() {
-
   const postsPath = path.join(process.cwd(), 'posts')
-  const fileNames = fs.readdirSync(postsPath) // Next.JS allows FS. Client side React does not support FS.
-
-  //  From File System
-  const slugs = fileNames.map((name) => {
+  const filenames = fs.readdirSync(postsPath)
+  const slugs = filenames.map((name) => {
     const filePath = path.join(postsPath, name)
     const file = fs.readFileSync(filePath, 'utf-8')
     const { data } = matter(file)
@@ -75,25 +61,21 @@ export function getStaticPaths() {
 
   return {
     paths: slugs.map((s) => ({ params: { slug: s.slug } })),
-
-    // fallback: false, // 404
-    fallback: true, // Retry till the path gets hydrated. Shows spinner
+    fallback: true,
   }
 }
+/**
+ * Need to get the paths here
+ * then the the correct post for the matching path
+ * Posts can come from the fs or our CMS
+ */
 
 export async function getStaticProps({ params, preview }) {
-
-  console.log(`@Preview in slug ${preview}`)
-
   let post
-
   try {
-
     const filesPath = path.join(process.cwd(), 'posts', `${params.slug}.mdx`)
     post = fs.readFileSync(filesPath, 'utf-8')
-
   } catch {
-
     const cmsPosts = (preview ? posts.draft : posts.published).map((p) => {
       return matter(p)
     })
@@ -103,16 +85,13 @@ export async function getStaticProps({ params, preview }) {
   }
 
   const { data } = matter(post)
-
   const mdxSource = await renderToString(post, { scope: data })
-
 
   return {
     props: {
       source: mdxSource,
       frontMatter: data,
     },
-
   }
 }
 

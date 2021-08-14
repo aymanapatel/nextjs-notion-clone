@@ -1,19 +1,30 @@
 import { Db } from 'mongodb'
 import { nanoid } from 'nanoid'
 
-export const createFolder = async (db: Db, folder: { createdBy: string; name: string }) => {
-    const newFolder = await db
-        .collection('folders')
-        .insertOne({
-            _id: nanoid(),
-            ...folder,
-            createdAt: new Date().toDateString(),
-        })
-        .then(({ ops }) => ops[0])
-
-    return newFolder
+export const getOneDoc = async (db: Db, id: string) => {
+  return db.collection('docs').findOne({ _id: id })
 }
 
-export const getFolders = async (db: Db, userId: string) => {
-    return db.collection('folders').find({ createdBy: userId }).toArray()
+export const getDocsByFolder = async (db: Db, folderId: string) => {
+  return db.collection('docs').find({ folder: folderId }).toArray()
+}
+
+export const createDoc = async (db: Db, doc: { createdBy: string; folder: string; name: string; content?: any }) => {
+  const newDoc = await db
+    .collection('docs')
+    .insertOne({
+      _id: nanoid(),
+      ...doc,
+      createdAt: new Date().toDateString(),
+    })
+    .then(({ ops }) => ops[0])
+
+  return newDoc
+}
+
+export const updateOne = async (db: Db, id: string, updates: any) => {
+  await db.collection('docs').updateOne({ _id: id }, { $set: updates })
+
+  const doc = await db.collection('docs').findOne({ _id: id })
+  return doc
 }

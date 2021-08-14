@@ -7,7 +7,7 @@ const Logo = ({ ...styles }) => {
     <Link href="/">
       <a>
         <Text fontSize="30px" color="#47B881" {...styles}>
-          <strong>Notion Clone</strong>
+          <strong>Known.</strong>
         </Text>
       </a>
     </Link>

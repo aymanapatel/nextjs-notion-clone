@@ -6,8 +6,7 @@ import Logo from '../components/logo'
 import SocialButton from '../components/socialButton'
 
 const Signin = () => {
-
-  const [session, loading] = useSession() // Uses Context API to get session
+  const [session, loading] = useSession()
   const router = useRouter()
 
   useEffect(() => {
@@ -50,8 +49,6 @@ const Signin = () => {
       >
         <Pane width="100%" textAlign="center">
           <SocialButton type="github" onClick={() => signIn('github')} />
-          <br />
-          <SocialButton type="google" onClick={() => { }} />
         </Pane>
       </Pane>
     </Pane>

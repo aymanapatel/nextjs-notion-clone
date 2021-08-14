@@ -5,7 +5,6 @@ import Hero from '../components/hero'
 import HomeNav from '../components/homeNav'
 import FeatureSection from '../components/featureSection'
 import { home } from '../content'
-import { hrtime } from 'process'
 
 const Home: FC<{ content: { hero: any; features: any[] } }> = ({ content }) => {
   return (
@@ -43,23 +42,16 @@ const Home: FC<{ content: { hero: any; features: any[] } }> = ({ content }) => {
 Home.defaultProps = {
   content: {
     features: [{ title: 'default feature', body: 'default body' }],
-    hero: { title: 'Hero Title', body: 'Hero Body' },
+    hero: { title: 'default title', body: 'default body' },
   },
 }
 
-/**
- * 
- * @param ctx Context Cookie from `api/preview.ts`
- * @returns 
- */
 export function getStaticProps(ctx) {
   return {
     props: {
-      content: ctx.preview ? home.draft : home.published, // passed to `<Home content={home.published}/>`
-    }
+      content: ctx.preview ? home.draft : home.published,
+    },
   }
 }
-
-
 
 export default Home
