@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Pane, majorScale, Text } from 'evergreen-ui'
+import { signIn, useSession } from 'next-auth/client'
+import { useRouter } from 'next/router'
 import Logo from '../components/logo'
-
 import SocialButton from '../components/socialButton'
 
 const Signin = () => {
+
+  const [session, loading] = useSession() // Uses Context API to get session
+  const router = useRouter()
+
+  useEffect(() => {
+    if (session) {
+      console.log(session)
+      router.push('/app')
+    }
+  }, [session, router])
+
   return (
     <Pane height="100vh" width="100vw" display="flex">
       <Pane
@@ -37,7 +49,9 @@ const Signin = () => {
         paddingX={majorScale(7)}
       >
         <Pane width="100%" textAlign="center">
-          <SocialButton type="github" onClick={() => {}} />
+          <SocialButton type="github" onClick={() => signIn('github')} />
+          <br />
+          <SocialButton type="google" onClick={() => { }} />
         </Pane>
       </Pane>
     </Pane>

@@ -9,6 +9,15 @@
 `npm run dev` or `yarn dev`
 
 
+## `[...<route>]`
+
+This is catch all route.
+
+
+## `[[...<route>]]`
+
+This optional catch route.
+ 
 
 ## Functions
 
@@ -68,7 +77,18 @@ Has Preview Variable
 `API GET /api/preview?route=<path>`: Set the Path as Preview Mode
 `API GET /api/clear-preview`: Clear Cookie for all paths
 
+## AuthN/AuthZ
+
+
+> Using [NextAuth](https://next-auth.js.org/) library
 
 
 
 
+
+# Questions
+
+## Why no state-management?
+
+- API State: React Hooks + (SWR || React Query)
+- Application State: Use `useReducer` + Context API
