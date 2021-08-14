@@ -10,21 +10,28 @@ export const getDocsByFolder = async (db: Db, folderId: string) => {
 }
 
 export const createDoc = async (db: Db, doc: { createdBy: string; folder: string; name: string; content?: any }) => {
-  const newDoc = await db
+  return db
     .collection('docs')
     .insertOne({
-      _id: nanoid(),
+      _id: nanoid(12),
       ...doc,
       createdAt: new Date().toDateString(),
     })
     .then(({ ops }) => ops[0])
-
-  return newDoc
 }
 
 export const updateOne = async (db: Db, id: string, updates: any) => {
-  await db.collection('docs').updateOne({ _id: id }, { $set: updates })
+  const operation = await db.collection('docs').updateOne(
+    {
+      _id: id,
+    },
+    { $set: updates },
+  )
 
-  const doc = await db.collection('docs').findOne({ _id: id })
-  return doc
+  if (!operation.result.ok) {
+    throw new Error('Could not update document')
+  }
+
+  const updated = await db.collection('docs').findOne({ _id: id })
+  return updated
 }

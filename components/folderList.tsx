@@ -18,7 +18,7 @@ const FolderList: FC<{ folders: any[] }> = ({ folders }) => {
 }
 
 FolderList.defaultProps = {
-  folders: [{ _id: 1, name: 'hello' }],
+  folders: [],
 }
 
 export default FolderList

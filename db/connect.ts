@@ -7,10 +7,10 @@ import { Db, MongoClient } from 'mongodb'
  * time to connect. Also, depending on your DB,
  * you might night be able to have many concurrent
  * DB connections. Most traditional DBs were not made for a stateless
- * environment like serverless. A serverless DB (HTTP based DB such as Fauna) whould work
+ * environment like serverless. A serverless DB (HTTP based DB) whould work
  * better.
  */
-global.mongo = global.mongo || {} // Serverless Mongo. Mongo Stich is serverless for React Native, iOS
+global.mongo = global.mongo || {}
 
 export const connectToDB = async () => {
   if (!global.mongo.client) {

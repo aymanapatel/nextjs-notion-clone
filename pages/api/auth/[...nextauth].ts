@@ -10,12 +10,16 @@ export default (req, res) =>
     jwt: {
       secret: process.env.JWT_SECRET,
     },
+    // Configure one or more authentication providers
     providers: [
       Providers.GitHub({
         clientId: process.env.GITHUB_ID,
         clientSecret: process.env.GITHUB_SECRET,
       }),
+
+      // ...add more providers here
     ],
+
     database: process.env.DATABASE_URL,
     pages: {
       signIn: '/signin',

@@ -1,16 +1,16 @@
 import React, { FC } from 'react'
 import hydrate from 'next-mdx-remote/hydrate'
-import { majorScale, Pane, Heading, Spinner } from 'evergreen-ui'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import fs from 'fs'
-import path from 'path'
 import matter from 'gray-matter'
 import renderToString from 'next-mdx-remote/render-to-string'
+import { majorScale, Pane, Heading, Spinner } from 'evergreen-ui'
+import path from 'path'
+import fs from 'fs'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { Post } from '../../types'
 import Container from '../../components/container'
 import HomeNav from '../../components/homeNav'
-import { posts } from '../../content'
+import { posts as postsFromCMS } from '../../content'
 
 const BlogPost: FC<Post> = ({ source, frontMatter }) => {
   const content = hydrate(source)
@@ -44,55 +44,36 @@ const BlogPost: FC<Post> = ({ source, frontMatter }) => {
   )
 }
 
-BlogPost.defaultProps = {
-  source: '',
-  frontMatter: { title: 'default title', summary: 'summary', publishedOn: '' },
+export async function getStaticPaths() {
+  const postsDirectory = path.join(process.cwd(), 'posts')
+  const filenames = fs.readdirSync(postsDirectory)
+  const paths = filenames.map((name) => ({ params: { slug: name.replace('.mdx', '') } }))
+  // dont get paths for cms posts, instead, let fallback handle it
+  return { paths, fallback: true }
 }
-
-export function getStaticPaths() {
-  const postsPath = path.join(process.cwd(), 'posts')
-  const filenames = fs.readdirSync(postsPath)
-  const slugs = filenames.map((name) => {
-    const filePath = path.join(postsPath, name)
-    const file = fs.readFileSync(filePath, 'utf-8')
-    const { data } = matter(file)
-    return data
-  })
-
-  return {
-    paths: slugs.map((s) => ({ params: { slug: s.slug } })),
-    fallback: true,
-  }
-}
-/**
- * Need to get the paths here
- * then the the correct post for the matching path
- * Posts can come from the fs or our CMS
- */
 
 export async function getStaticProps({ params, preview }) {
-  let post
+  let postFile
   try {
-    const filesPath = path.join(process.cwd(), 'posts', `${params.slug}.mdx`)
-    post = fs.readFileSync(filesPath, 'utf-8')
+    const postPath = path.join(process.cwd(), 'posts', `${params.slug}.mdx`)
+    postFile = fs.readFileSync(postPath, 'utf-8')
   } catch {
-    const cmsPosts = (preview ? posts.draft : posts.published).map((p) => {
-      return matter(p)
+    // must be from cms or its a 404
+    const collection = preview ? postsFromCMS.draft : postsFromCMS.published
+    postFile = collection.find((p) => {
+      const { data } = matter(p)
+      return data.slug === params.slug
     })
-
-    const match = cmsPosts.find((p) => p.data.slug === params.slug)
-    post = match.content
   }
 
-  const { data } = matter(post)
-  const mdxSource = await renderToString(post, { scope: data })
-
-  return {
-    props: {
-      source: mdxSource,
-      frontMatter: data,
-    },
+  if (!postFile) {
+    throw new Error('no post')
   }
+
+  const { content, data } = matter(postFile)
+  const mdxSource = await renderToString(content, { scope: data })
+
+  return { props: { source: mdxSource, frontMatter: data }, revalidate: 30 }
 }
 
 export default BlogPost
